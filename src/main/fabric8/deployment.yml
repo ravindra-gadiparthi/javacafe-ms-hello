@@ -1,0 +1,44 @@
+metadata:
+  annotations:
+    kubernetes.io/change-cause: ${project.version}
+  labels:
+    group: ${project.groupId}
+    app: ${project.artifactId}
+    project: ${project.artifactId}
+    provider: fabric8
+    hystrix.enabled: true
+    hystrix.cluster: default
+    version: ${project.version}
+spec:
+  replicas: ${kubernetes.replica.count}
+  revisionHistoryLimit: 5
+  strategy:
+    rollingUpdate:
+      type: RollingUpdate
+      maxUnavailable: 50%
+      maxSurge: 30%
+  template:
+    metadata:
+      labels:
+        project: ${project.artifactId}
+        hystrix.enabled: true
+        hystrix.cluster: default
+        version: ${project.version}
+    spec:
+      volumes:
+        - name: varlog
+          emptyDir: {}
+      containers:
+        - image: ravindragadiparthi/${project.artifactId}:${project.version}
+          name : spring-boot
+          env:
+            - name: "SPRING_PROFILES_ACTIVE"
+              value: development
+            - name: "POD_NAME"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "metadata.name"
+          imagePullPolicy : IfNotPresent
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log

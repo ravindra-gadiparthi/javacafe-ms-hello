@@ -1,0 +1,11 @@
+metadata:
+  labels:
+    project: ${project.artifactId}
+    hystrix.enabled: true
+    hystrix.cluster: default
+    version: ${project.version}
+spec:
+  type: NodePort
+  ports:
+      - port: 8080
+        targetPort: 80

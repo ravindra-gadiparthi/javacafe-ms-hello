@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: javacafe-ms-hello
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        strategy: restart_context
+
+management:
+  context-path: "/manage"
+  security:
+    enabled: false
+
+props:
+  messages:
+    hello : "Hello Message from Application yml"
+
+management.security.enabled : false
+
